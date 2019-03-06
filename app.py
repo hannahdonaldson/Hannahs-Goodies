@@ -5,30 +5,33 @@ from flask_heroku import Heroku
 
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://tlbjnprzxwowva:db0bc8667316928abf4ac3f261690a8459d0f33b1128149b9511ad0fe4daaa66@ec2-54-163-234-88.compute-1.amazonaws.com:5432/d3b8cct3rntuim'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://tlbjnprzxwowva:db0bc8667316928abf4ac3f261690a8459d0f33b1128149b9511ad0fe4daaa66@ec2-54-163-234-88.compute-1.amazonaws.com:5432/d3b8cct3rntuim'
 
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 class Book(db.Model):
-    __tablename__ = "books"
-    id = db.Column(db.Interger, primary_key = True) # a bunch of exel sheets you cant look at, id is a column that exepts a integer, uniqe id number 
+    __tablename__ ="books"
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
-    author = db.Column(db.String(80)) # needs to have a data base if your working with columns 
+    author = db.Column(db.String(80))
 
-    def __inti__(self, title, author):
+    def __int__(self, title, author):
         self.title = title
         self.author = author
 
-    def __repr__(self): # repr build in python method 
-        return '<Title %r>' % self.title # the second % is what actully gets shown, anouther way of doing string interpalation 
+    def __repr__(self):
+        return '<Title %r>' % self.title
+        # This is string interpalation in python
+        # the % self.title is setting a value to %r
 
 
-@app.route('/')
+@app.route("/")
 def home():
-    return "<h1>Hi from Flask</h1>"
+    return "<h1>Hello World</h1>"
 
-@app.route('/book/input', methods = ['POST'])
+
+@app.route('/book/input', methods=['POST'])
 def books_input():
     if request.content_type == 'application/json':
         post_data = request.get_json()
@@ -38,8 +41,31 @@ def books_input():
         db.session.add(reg)
         db.session.commit()
         return jsonify("Data Posted")
-    return jsonify('Somethings amiss')
+    return jsonify("Something went wrong")
+
+
+@app.route('/books', methods=['GET'])
+def return_books():
+    all_books = db.session.query(Book.title, Book.author).all()
+    return jsonify(all_books)
+
+
 
 if __name__ == '__main__':
     app.debug = True
     app.run()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
