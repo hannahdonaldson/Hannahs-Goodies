@@ -16,7 +16,7 @@ class Book(db.Model):
     title = db.Column(db.String(120))
     author = db.Column(db.String(80))
 
-    def __int__(self, title, author):
+    def __init__(self, title, author):
         self.title = title
         self.author = author
 
