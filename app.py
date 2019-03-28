@@ -78,7 +78,7 @@ from flask_heroku import Heroku
 
 app = Flask(__name__)
 CORS(app)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://fldlupsrjhcvea:bd1ef6f8de3dd04e0257d48570ede3eb7fdc6cd524cc7a22afc335dc1107d889@ec2-23-21-106-241.compute-1.amazonaws.com:5432/dbukkeahhrgk3h'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://dxonitmdctxush:1766abdc44fbd2422787720371381c54e0612771d3b7bef3e43201a3dd281856@ec2-174-129-10-235.compute-1.amazonaws.com:5432/d32n2gvkl5pork'
 
 heroku = Heroku(app)
 db = SQLAlchemy(app)
@@ -88,20 +88,22 @@ class Goodies(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     summary = db.Column(db.String(80))
-    cost = db.Column(db.String(4))
+    cost = db.Column(db.String(10))
     goodieType = db.Column(db.String(40))
+    quantity = db.Column(db.String(4))
     
 
-    def __init__(self, title, summary, cost, goodieType):
+    def __init__(self, title, summary, cost, goodieType, quantity):
         self.title = title
         self.summary = summary
         self.cost = cost
         self.goodieType = goodieType
+        self.quantity = quantity
 
     def __repr__(self):
         return '<Title %r>' % self.title
-        # This is string interpalation in python
-        # the % self.title is setting a value to %r
+    #     # This is string interpalation in python
+    #     # the % self.title is setting a value to %r
 
 
 @app.route("/")
@@ -109,15 +111,19 @@ def home():
     return "<h1>Hello World</h1>"
 
 
+
 @app.route('/goodie/input', methods=['POST'])
 def goodies_input():
     if request.content_type == 'application/json':
         post_data = request.get_json()
+
         title = post_data.get('title')
         cost = post_data.get('cost')
         goodieType = post_data.get('goodieType')
         summary = post_data.get('summary')
-        reg = Goodies(title, summary, cost, goodieType)
+        quantity = post_data.get('quantity')
+
+        reg = Goodies(title, summary, cost, goodieType, quantity)
         db.session.add(reg)
         db.session.commit()
         return jsonify("Data Posted")
@@ -126,12 +132,12 @@ def goodies_input():
 
 @app.route('/goodies', methods=['GET'])
 def return_goodies():
-    all_goodies = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType).all()
+    all_goodies = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType, Goodies.quantity).all()
     return jsonify(all_goodies)
 
 @app.route('/goodie/<id>', methods = ['GET'])
 def return_single_goodie(id):
-    one_goodie = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType).filter(Goodies.id == id).first()
+    one_goodie = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType, Goodies.quantity).filter(Goodies.id == id).first()
     return jsonify(one_goodie)
 
 @app.route('/delete/<id>', methods=['DELETE'])
@@ -145,7 +151,7 @@ def goodie_delete(id):
 
 @app.route('/search/<title>', methods=['GET'])
 def goodies_search(title):
-    search_goodies = db.session.query(Goodies.id, Goodies.title, Goodies.cost, Goodies.goodieType, Goodies.summary).filter(Goodies.title == title).first()
+    search_goodies = db.session.query(Goodies.id, Goodies.title, Goodies.cost, Goodies.goodieType, Goodies.summary, Goodies.quantity).filter(Goodies.title == title).first()
 
     return jsonify(search_goodies)
 
