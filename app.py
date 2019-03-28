@@ -117,17 +117,17 @@ db = SQLAlchemy(app)
 class MonthlyGoodieBox(db.Model):
     __tablename__ ="books"
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120))
-    author = db.Column(db.String(80))
+    name = db.Column(db.String(120))
+    email = db.Column(db.String(80))
 
-    def __init__(self, title, author):
-        self.title = title
-        self.author = author
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
 
     def __repr__(self):
-        return '<Title %r>' % self.title
+        return '<Name %r>' % self.name
         # This is string interpalation in python
-        # the % self.title is setting a value to %r
+        # the % self.name is setting a value to %r
 
 
 @app.route("/")
@@ -139,9 +139,9 @@ def home():
 def boxs_input():
     if request.content_type == 'application/json':
         post_data = request.get_json()
-        title = post_data.get('title')
-        author = post_data.get('author')
-        reg = MonthlyGoodieBox(title, author)
+        name = post_data.get('name')
+        email = post_data.get('email')
+        reg = MonthlyGoodieBox(name, email)
         db.session.add(reg)
         db.session.commit()
         return jsonify("Data Posted")
@@ -150,12 +150,12 @@ def boxs_input():
 
 @app.route('/boxs', methods=['GET'])
 def return_boxs():
-    all_boxs = db.session.query(MonthlyGoodieBox.id, MonthlyGoodieBox.title, MonthlyGoodieBox.author).all()
+    all_boxs = db.session.query(MonthlyGoodieBox.id, MonthlyGoodieBox.name, MonthlyGoodieBox.email).all()
     return jsonify(all_boxs)
 
 @app.route('/box/<id>', methods = ['GET'])
 def return_single_box(id):
-    one_box = db.session.query(MonthlyGoodieBox.id, MonthlyGoodieBox.title, MonthlyGoodieBox.author).filter(MonthlyGoodieBox.id == id).first()
+    one_box = db.session.query(MonthlyGoodieBox.id, MonthlyGoodieBox.name, MonthlyGoodieBox.email).filter(MonthlyGoodieBox.id == id).first()
     return jsonify(one_box)
 
 @app.route('/delete/<id>', methods=['DELETE'])
@@ -170,3 +170,4 @@ def box_delete(id):
 if __name__ == '__main__':
     app.debug = True
     app.run()
+
