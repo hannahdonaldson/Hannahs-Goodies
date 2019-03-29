@@ -53,7 +53,7 @@ class Goodies(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
     summary = db.Column(db.String(80), nullable=False)
-    cost = (db.Float, nullable=False)
+    cost = db.Column(db.Float, nullable=False)
     goodieType = db.Column(db.String(40), nullable=False)
     quantity = db.Column(db.String(4))
     goodie_url = db.Column(db.String(4))
@@ -79,7 +79,7 @@ class Cart_item(db.Model):
     __tablename__="cart_item"
     id = db.Column(db.Integer, primary_key=True)
     cart_id = db.Column(db.Integer, db.ForeignKey(Cart.id))
-    goodie_id = db.Column(db.Integer, db.ForeignKey(Goodie.id))
+    goodie_id = db.Column(db.Integer, db.ForeignKey(Goodies.id))
     
     def __init__(self, cart_id, goodie_id):
       self.cart_id = cart_id
@@ -105,7 +105,7 @@ class Order_item(db.Model):
     __tablename__ ="order_item"
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    goodie_id = db.Column(db.Integer, db.ForeignKey('goodie.id'), nullable=False)
+    goodie_id = db.Column(db.Integer, db.ForeignKey('goodies.id'), nullable=False)
     
 
     def __init__(self, order_id, goodie_id):
