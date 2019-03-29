@@ -145,6 +145,11 @@ def input_goodie():
     if request.content_type == 'application/json':
         post_data = request.get_json()
         title = post_data.get('title')
+        summary = post_data.get('summary')
+        cost = post_data.get('cost')
+        goodieType = post_data.get('goodieType')
+        goodie_url = post_data.get('goodie_url')
+
         record = Goodies(title, summary, cost, goodieType, goodie_url)
         db.session.add(record)
         db.session.commit()
