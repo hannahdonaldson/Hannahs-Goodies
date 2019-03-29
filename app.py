@@ -55,18 +55,16 @@ class Goodies(db.Model):
     summary = db.Column(db.String(80), nullable=False)
     cost = db.Column(db.Float, nullable=False)
     goodieType = db.Column(db.String(40), nullable=False)
-    quantity = db.Column(db.String(4))
     goodie_url = db.Column(db.String(4))
     cart_items = db.relationship('Cart_item', backref='goodies', lazy=True)
     order_items = db.relationship('Order_item', backref='goodies', lazy=True)
     
 
-    def __init__(self, title, summary, cost, goodieType, quantity, goodie_url):
+    def __init__(self, title, summary, cost, goodieType, goodie_url):
         self.title = title
         self.summary = summary
         self.cost = cost
         self.goodieType = goodieType
-        self.quantity = quantity
         self.goodie_url = goodie_url
 
     def __repr__(self):
