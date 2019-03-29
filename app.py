@@ -55,7 +55,7 @@ class Goodies(db.Model):
     summary = db.Column(db.String(80), nullable=False)
     cost = db.Column(db.Float, nullable=False)
     goodieType = db.Column(db.String(40), nullable=False)
-    goodie_url = db.Column(db.String(4))
+    goodie_url = db.Column(db.String(100000))
     cart_items = db.relationship('Cart_item', backref='goodies', lazy=True)
     order_items = db.relationship('Order_item', backref='goodies', lazy=True)
     
