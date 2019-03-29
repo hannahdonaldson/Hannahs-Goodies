@@ -26,9 +26,6 @@ class User(db.Model):
         self.password = password
         self.user_type = user_type
 
-    def __repr__(self):
-        return '<Title %r>' % self.title
-
 
 class Cart(db.Model):
     __tablename__ = "cart"
@@ -66,9 +63,6 @@ class Goodies(db.Model):
         self.cost = cost
         self.goodieType = goodieType
         self.goodie_url = goodie_url
-
-    def __repr__(self):
-        return '<Title %r>' % self.title
     #     # This is string interpalation in python
     #     # the % self.title is setting a value to %r
 
