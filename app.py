@@ -112,16 +112,16 @@ class Order_item(db.Model):
         self.order_id = order_id
         self.goodie_id = goodie_id
 
-class Address(db.Model):
-    __tablename__ ="order_item"
-    id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    goodie_id = db.Column(db.Integer, db.ForeignKey('goodies.id'), nullable=False)
+# class Address(db.Model):
+#     __tablename__ ="order_item"
+#     id = db.Column(db.Integer, primary_key=True)
+#     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+#     goodie_id = db.Column(db.Integer, db.ForeignKey('goodies.id'), nullable=False)
     
 
-    def __init__(self, order_id, goodie_id):
-        self.order_id = order_id
-        self.goodie_id = goodie_id
+#     def __init__(self, order_id, goodie_id):
+#         self.order_id = order_id
+#         self.goodie_id = goodie_id
 
 
 
