@@ -157,6 +157,11 @@ def delete_goodie(id):
     db.session.commit()
     return jsonify("Completed Delete action")
 
+    @app.route('/goodie/<goodieType>', methods = ['GET'])
+def return_goodie_catagory(goodieType):
+    goodie_catagory = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType, Goodies.goodie_url).filter(Goodies.id == id).first()
+    return jsonify(goodie_catagory)
+
 @app.route('/user/input', methods=['POST'])
 def user_input():
     if request.content_type == 'application/json':
