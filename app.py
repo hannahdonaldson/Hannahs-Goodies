@@ -1,7 +1,16 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template,
 from flask_sqlalchemy import SQLAlchemy 
 from flask_cors import CORS 
 from flask_heroku import Heroku 
+import stripe
+import config
+
+stripe_keys = {
+    'secret_key': config.SECRET_KEY,
+    'publishable_key': config.PUBLISHABLE_KEY 
+}
+
+stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
 CORS(app)
@@ -281,6 +290,23 @@ def goodies_search(title):
     search_goodies = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType, Goodies.goodie_url).filter(Goodies.title == title).first()
 
     return jsonify(search_goodies)
+
+@app.route('/charge', methods=['POST'])
+def charge():
+    amount = 500
+
+    customer = stripe.Customer.create(
+        email='customer@test.com',
+        source=request.form['stripeToken']
+        )
+
+    charge = stripe.Charge.create(
+        customer=customer.id,
+        amount=amount,
+        currency='usd',
+        description='Our Flask Charge'
+        )
+    return render_template('charge.html', amount=amount)
 
   
 
