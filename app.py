@@ -180,7 +180,7 @@ def register():
         name = post_data.get('name')
         email = post_data.get('email')
         password = post_data.get('password')
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        hashed_password = Bcrypt.generate_password_hash(password).decode('utf-8')
         user_type = post_data.get('user_type')
 
         reg = User(name, email, hashed_password, user_type)
