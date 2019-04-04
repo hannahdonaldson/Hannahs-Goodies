@@ -19,13 +19,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://bxsswwybqhvhic:b2fddf8a53491
 
 heroku = Heroku(app)
 db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
 
 class User(db.Model):
     __tablename__ ="user"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), nullable=False)
-    password = db.Column(db.String(42), nullable=False)
+    password = db.Column(db.String(), nullable=False)
     user_type = db.Column(db.String(80), nullable=False)
     cart = db.relationship('Cart', backref='user', lazy=True)
     orders = db.relationship('Order', backref='user', lazy=True)
@@ -180,7 +181,7 @@ def register():
         name = post_data.get('name')
         email = post_data.get('email')
         password = post_data.get('password')
-        hashed_password = Bcrypt.generate_password_hash(password).decode('utf-8')
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         user_type = post_data.get('user_type')
 
         reg = User(name, email, hashed_password, user_type)
