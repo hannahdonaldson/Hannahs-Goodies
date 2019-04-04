@@ -4,6 +4,7 @@ from flask_cors import CORS
 from flask_heroku import Heroku 
 import stripe
 import config
+from flask_bcrypt import Bcrypt
 
 stripe_keys = {
     'secret_key': config.SECRET_KEY,
@@ -171,21 +172,39 @@ def return_goodie_catagory(goodieType):
     goodie_catagory = db.session.query(Goodies.id, Goodies.title, Goodies.summary, Goodies.cost, Goodies.goodieType, Goodies.goodie_url).filter(Goodies.id == id).first()
     return jsonify(goodie_catagory)
 
-@app.route('/user/input', methods=['POST'])
-def user_input():
+@app.route('/register', methods=['POST'])
+def register():
     if request.content_type == 'application/json':
         post_data = request.get_json()
 
         name = post_data.get('name')
         email = post_data.get('email')
         password = post_data.get('password')
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         user_type = post_data.get('user_type')
-        
-        reg = User(name, email, password, user_type)
+
+        reg = User(name, email, hashed_password, user_type)
         db.session.add(reg)
         db.session.commit()
-        return jsonify("User Posted")
-    return jsonify("Something went wrong")
+        return jsonify("Data Posted")
+    return jsonify('Something went wrong')
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.content_type == 'application/json':
+        post_data = request.get_json()
+        check_email = db.session.query(User.email).filter(User.email == post_data.get("email")).first()
+        if check_email is None:
+            return jsonify("User Email NOT Verified")
+
+        password = post_data.get('password')
+        hashed_password = db.session.query(User.password).filter(User.email == post_data.get("email")).first()
+        valid_password = bcrypt.check_password_hash(hashed_password[0], password)
+        if valid_password:
+            return jsonify("User Verfied")
+        return jsonify("Password is not correct for this user")
+    return jsonify("Error verifying user")
 
 @app.route('/users', methods=['GET'])
 def return_all_users():

@@ -13,6 +13,7 @@ flask-cors = "*"
 psycopg2 = "*"
 flask-sqlalchemy = "*"
 stripe = "*"
+flask-bcrypt = "*"
 
 [requires]
 python_version = "3.7"
