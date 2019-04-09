@@ -60,7 +60,7 @@ class Goodies(db.Model):
     __tablename__ ="goodies"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120), nullable=False)
-    summary = db.Column(db.String(80), nullable=False)
+    summary = db.Column(db.String(1000), nullable=False)
     cost = db.Column(db.Float, nullable=False)
     goodieType = db.Column(db.String(40), nullable=False)
     goodie_url = db.Column(db.String(1000))
