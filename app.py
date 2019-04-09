@@ -27,7 +27,7 @@ class User(db.Model):
     name = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(), nullable=False)
-    user_type = db.Column(db.String(80), nullable=False)
+    user_type = db.Column(db.String(40), nullable=False)
     cart = db.relationship('Cart', backref='user', lazy=True)
     orders = db.relationship('Order', backref='user', lazy=True)
 
