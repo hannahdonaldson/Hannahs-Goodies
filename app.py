@@ -161,6 +161,27 @@ def input_goodie():
         return jsonify("Data Posted")
     return jsonify("Error adding Goodie")
 
+@app.route('/update_goodie/<id>', methods=['PUT'])
+def goodie_update(id):
+    if request.content_type == 'application/json':
+        put_data = request.get_json()
+        
+        title = post_data.get('title')
+        summary = post_data.get('summary')
+        cost = post_data.get('cost')
+        goodieType = post_data.get('goodieType')
+        goodie_url = post_data.get('goodie_url')
+
+        record = db.session.query(Goodie).get(id)
+        record.title = title
+        record.summary = summary
+        record.cost = cost
+        record.goodieType = goodieType
+        record.goodie_url = goodie_url
+        db.session.commit()
+        return jsonify("Compleded Update")
+    return jsonify("Update Failed")
+
 @app.route('/goodie/delete/<id>', methods=["DELETE"])
 def delete_goodie(id):
     goodie = db.session.query(Goodie).get(id)
